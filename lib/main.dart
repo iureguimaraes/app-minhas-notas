@@ -1,12 +1,13 @@
 import 'package:app_minhas_notas/disciplines/pages/disciplines_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ProviderScope(child: MinhasNotasApp()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MinhasNotasApp extends StatelessWidget {
+  const MinhasNotasApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
