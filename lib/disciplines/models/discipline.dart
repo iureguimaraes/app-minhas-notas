@@ -7,6 +7,7 @@ class Activity {
 }
 
 class Discipline {
+  int? id;
   String name;
   List<Activity> activities = [];
 

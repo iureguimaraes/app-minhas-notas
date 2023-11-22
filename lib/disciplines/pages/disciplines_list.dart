@@ -1,4 +1,5 @@
 import 'package:app_minhas_notas/disciplines/pages/add_discipline.dart';
+import 'package:app_minhas_notas/disciplines/pages/edit_discipline.dart';
 import 'package:app_minhas_notas/disciplines/repositories/discipline_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,18 +20,33 @@ class DisciplinesList extends ConsumerWidget {
               )
             : (ListView(
                 children: [
-                  for (final discipline in disciplines)
+                  for (var discipline in disciplines)
                     ListTile(
                       title: Text(discipline.name),
                       subtitle: Text(discipline.getDescription()),
-                      trailing: IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () {
-                          ref
-                              .read(disciplineRepositoryProvider.notifier)
-                              .removeDiscipline(discipline);
-                        },
-                      ),
+                      trailing: Wrap(spacing: 4, children: [
+                        IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditDisciplinePage(
+                                        discipline: discipline,
+                                        index: disciplines.indexOf(discipline),
+                                      )),
+                            );
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () {
+                            ref
+                                .read(disciplineRepositoryProvider.notifier)
+                                .removeDiscipline(discipline);
+                          },
+                        )
+                      ]),
                     )
                 ],
               )),

@@ -11,8 +11,17 @@ class DisciplineRepository extends Notifier<List<Discipline>> {
     state = [...state, discipline];
   }
 
+  void updateDiscipline(Discipline discipline, int index) {
+    state = state.asMap().entries.map((entry) {
+      Discipline d = entry.value;
+      int i = entry.key;
+
+      return index != i ? d : discipline;
+    }).toList();
+  }
+
   void removeDiscipline(Discipline discipline) {
-    state = state.where((d) => d.name != discipline.name).toList();
+    state = state.where((d) => d != discipline).toList();
   }
 }
 
