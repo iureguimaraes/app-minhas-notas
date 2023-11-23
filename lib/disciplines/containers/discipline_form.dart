@@ -90,9 +90,11 @@ class ActivityListTile extends StatefulWidget {
   final ValueSetter<Activity> onChanged;
   final ValueGetter onDeleted;
   final Activity activity;
+  final int index;
 
   const ActivityListTile(
       {super.key,
+      required this.index,
       required this.activity,
       required this.onChanged,
       required this.onDeleted});
@@ -107,13 +109,16 @@ class _ActivityListTileState extends State<ActivityListTile> {
     return ListTile(
         title: Text(widget.activity.name),
         subtitle: Text(widget.activity.description),
+        leading: ReorderableDragStartListener(
+          index: widget.index,
+          child: Icon(Icons.drag_handle),
+        ),
         trailing: Wrap(
           children: [
             IconButton(
                 onPressed: () {
                   final formKey = GlobalKey<FormState>();
                   Activity activityFormState = widget.activity;
-
                   showDialog(
                     context: context,
                     builder: (context) {
@@ -137,7 +142,7 @@ class _ActivityListTileState extends State<ActivityListTile> {
                                 Navigator.pop(context);
                               }
                             },
-                            child: const Text('Salvar'),
+                            child: const Text('Salvar Edições'),
                           ),
                         ],
                       );
@@ -199,30 +204,43 @@ class _DisciplineFormState extends State<DisciplineForm> {
                     ? Center(
                         child: Text('Nenhuma atividade adicionada'),
                       )
-                    : ListView(
+                    : ReorderableListView(
+                        buildDefaultDragHandles: false,
+                        padding: EdgeInsets.only(top: 16),
+                        header: Text(
+                          'Atividades',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        onReorder: (oldIndex, newIndex) {
+                          setState(() {
+                            if (newIndex > oldIndex) {
+                              newIndex = newIndex - 1;
+
+                              final activity = activities.removeAt(oldIndex);
+                              activities.insert(newIndex, activity);
+                            }
+                          });
+                        },
                         children: activities.map((activity) {
-                        return Column(
-                          children: [
-                            SizedBox(height: 16),
-                            ActivityListTile(
-                              activity: activity,
-                              onChanged: (changed) {
-                                setState(() {
-                                  activity.weight = changed.weight;
-                                  activity.grade = changed.grade;
-                                  activity.name = changed.name;
-                                });
-                              },
-                              onDeleted: () {
-                                setState(() {
-                                  activities.remove(activity);
-                                });
-                              },
-                            )
-                          ],
-                        );
-                      }).toList())),
-            SizedBox(height: 16),
+                          return ActivityListTile(
+                            index: activities.indexOf(activity),
+                            key: ValueKey(activity),
+                            activity: activity,
+                            onChanged: (changed) {
+                              setState(() {
+                                activity.weight = changed.weight;
+                                activity.grade = changed.grade;
+                                activity.name = changed.name;
+                              });
+                            },
+                            onDeleted: () {
+                              setState(() {
+                                activities.remove(activity);
+                              });
+                            },
+                          );
+                        }).toList())),
+            SizedBox(height: 8),
             TextButton(
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50),
