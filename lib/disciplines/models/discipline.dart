@@ -21,13 +21,13 @@ class Discipline {
     } else {
       final weights = activities.fold(
           0.0, (weightSum, element) => weightSum + element.weight);
-      final finalGrade = activities.fold(
+      final currentGrade = activities.fold(
               0.0,
               (gradeSum, element) =>
                   gradeSum + (element.weight * element.grade)) /
           weights;
 
-      return "${activities.map((activity) => '${activity.name}: ${activity.grade}').join(", ")} | Nota: $finalGrade";
+      return "${activities.map((activity) => '${activity.name}: ${activity.grade}').join(", ")}${weights > 0 ? "\nMédia Atual: $currentGrade." : "\nNenhum peso cadastrado."}";
     }
   }
 }
