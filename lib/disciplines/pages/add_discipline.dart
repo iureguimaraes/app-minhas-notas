@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app_minhas_notas/disciplines/containers/discipline_form.dart';
-import 'package:app_minhas_notas/disciplines/repositories/discipline_repository.dart';
+import 'package:app_minhas_notas/disciplines/controllers/discipline_controller.dart';
 
 class AddDisciplinePage extends ConsumerStatefulWidget {
   const AddDisciplinePage({super.key});
@@ -15,7 +15,7 @@ class AddDisciplinePageState extends ConsumerState<AddDisciplinePage> {
   @override
   Widget build(BuildContext context) {
     final disciplineRepository =
-        ref.read(disciplineRepositoryProvider.notifier);
+        ref.read(disciplineControllerProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(title: Text('Adicionar Disciplina')),

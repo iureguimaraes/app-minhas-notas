@@ -1,30 +1,37 @@
 import 'package:app_minhas_notas/disciplines/models/discipline.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DisciplineRepository extends Notifier<List<Discipline>> {
+abstract class AbstractDisciplineRepository {
+  List<Discipline> disciplines = [];
+
+  List<Discipline> addDiscipline(Discipline discipline);
+  List<Discipline> updateDiscipline(Discipline discipline, int index);
+  List<Discipline> removeDiscipline(Discipline discipline);
+}
+
+class DisciplineRepository extends AbstractDisciplineRepository {
   @override
-  build() {
-    return [];
+  List<Discipline> addDiscipline(Discipline discipline) {
+    disciplines = [...disciplines, discipline];
+    return disciplines;
   }
 
-  void addDiscipline(Discipline discipline) {
-    state = [...state, discipline];
-  }
-
-  void updateDiscipline(Discipline discipline, int index) {
-    state = state.asMap().entries.map((entry) {
+  @override
+  List<Discipline> updateDiscipline(Discipline discipline, int index) {
+    disciplines = disciplines.asMap().entries.map((entry) {
       Discipline d = entry.value;
       int i = entry.key;
 
       return index != i ? d : discipline;
     }).toList();
+    return disciplines;
   }
 
-  void removeDiscipline(Discipline discipline) {
-    state = state.where((d) => d != discipline).toList();
+  @override
+  List<Discipline> removeDiscipline(Discipline discipline) {
+    disciplines = disciplines.where((d) => d != discipline).toList();
+    return disciplines;
   }
 }
 
-final disciplineRepositoryProvider =
-    NotifierProvider<DisciplineRepository, List<Discipline>>(
-        () => DisciplineRepository());
+final disciplineRepositoryProvider = Provider((ref) => DisciplineRepository());

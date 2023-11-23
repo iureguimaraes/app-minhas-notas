@@ -1,6 +1,6 @@
 import 'package:app_minhas_notas/disciplines/pages/add_discipline.dart';
 import 'package:app_minhas_notas/disciplines/pages/edit_discipline.dart';
-import 'package:app_minhas_notas/disciplines/repositories/discipline_repository.dart';
+import 'package:app_minhas_notas/disciplines/controllers/discipline_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,7 +9,7 @@ class DisciplinesList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final disciplines = ref.watch(disciplineRepositoryProvider);
+    final disciplines = ref.watch(disciplineControllerProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text('Minhas Disciplinas')),
@@ -42,7 +42,7 @@ class DisciplinesList extends ConsumerWidget {
                           icon: Icon(Icons.delete),
                           onPressed: () {
                             ref
-                                .read(disciplineRepositoryProvider.notifier)
+                                .read(disciplineControllerProvider.notifier)
                                 .removeDiscipline(discipline);
                           },
                         )
