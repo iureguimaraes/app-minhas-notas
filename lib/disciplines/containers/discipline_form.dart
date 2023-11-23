@@ -1,19 +1,15 @@
 import 'package:app_minhas_notas/disciplines/models/discipline.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class ActivityForm extends StatefulWidget {
-  final String name;
-  final double weight;
-  final double grade;
-
   final ValueSetter<Activity> onChanged;
+  final GlobalKey<FormState> formKey;
+  final Activity activity;
 
   const ActivityForm(
       {super.key,
-      required this.name,
-      required this.weight,
-      required this.grade,
+      required this.activity,
+      required this.formKey,
       required this.onChanged});
 
   @override
@@ -27,63 +23,127 @@ class _ActivityFormState extends State<ActivityForm> {
 
   @override
   void initState() {
-    _nameController.text = widget.name;
-    _weightController.text = widget.weight.toString();
-    _gradeController.text = widget.grade.toString();
+    _nameController.text = widget.activity.name;
+    _weightController.text = widget.activity.weight.toString();
+    _gradeController.text = widget.activity.grade.toString();
 
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: TextField(
-            decoration: InputDecoration(labelText: 'Nome da atividade'),
-            controller: _nameController,
-            onChanged: (value) {
-              widget.onChanged(getActivityFromForm());
-            },
-          ),
-        ),
-        SizedBox(width: 16),
-        SizedBox(
-          width: 80,
-          child: TextField(
-            decoration: InputDecoration(labelText: 'Peso'),
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'))
-            ],
-            controller: _weightController,
-            onChanged: (value) {
-              widget.onChanged(getActivityFromForm());
-            },
-          ),
-        ),
-        SizedBox(width: 16),
-        SizedBox(
-          width: 80,
-          child: TextField(
-            decoration: InputDecoration(labelText: 'Nota'),
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'))
-            ],
-            controller: _gradeController,
-            onChanged: (value) {
-              widget.onChanged(getActivityFromForm());
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Activity getActivityFromForm() {
+  Activity getActivityFromControllers() {
     return Activity(_nameController.text, double.parse(_weightController.text),
         double.parse(_gradeController.text));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: SizedBox(
+        width: 400,
+        child: Form(
+          onChanged: () {
+            widget.onChanged(getActivityFromControllers());
+          },
+          key: widget.formKey,
+          child: Wrap(
+            spacing: 8,
+            children: [
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Nome da atividade'),
+                controller: _nameController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Insira um nome para a atividade';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Peso'),
+                controller: _weightController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Insira um peso para a atividade';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Nota'),
+                controller: _gradeController,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ActivityListTile extends StatefulWidget {
+  final ValueSetter<Activity> onChanged;
+  final Activity activity;
+
+  const ActivityListTile(
+      {super.key, required this.activity, required this.onChanged});
+
+  @override
+  State<ActivityListTile> createState() => _ActivityListTileState();
+}
+
+class _ActivityListTileState extends State<ActivityListTile> {
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+        title: Text(widget.activity.name),
+        subtitle: Text(widget.activity.description),
+        trailing: Wrap(
+          children: [
+            IconButton(
+                onPressed: () {
+                  final formKey = GlobalKey<FormState>();
+                  Activity activityFormState = widget.activity;
+
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Editar Atividade'),
+                        content: ActivityForm(
+                            activity: widget.activity,
+                            formKey: formKey,
+                            onChanged: (activity) {
+                              activityFormState = activity;
+                            }),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Cancelar'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                widget.onChanged(activityFormState);
+                                Navigator.pop(context);
+                              }
+                            },
+                            child: const Text('Salvar'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                icon: Icon(Icons.edit)),
+            IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
+          ],
+        ));
   }
 }
 
@@ -136,14 +196,14 @@ class _DisciplineFormState extends State<DisciplineForm> {
                         return Column(
                           children: [
                             SizedBox(height: 16),
-                            ActivityForm(
-                              weight: activity.weight,
-                              grade: activity.grade,
-                              name: activity.name,
+                            ActivityListTile(
+                              activity: activity,
                               onChanged: (changed) {
-                                activity.name = changed.name;
-                                activity.grade = changed.grade;
-                                activity.weight = changed.weight;
+                                setState(() {
+                                  activity.weight = changed.weight;
+                                  activity.grade = changed.grade;
+                                  activity.name = changed.name;
+                                });
                               },
                             )
                           ],

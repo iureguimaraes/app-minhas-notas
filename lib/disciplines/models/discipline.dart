@@ -4,6 +4,8 @@ class Activity {
   double grade;
 
   Activity(this.name, this.weight, this.grade);
+
+  String get description => 'Peso: $weight | Nota: $grade';
 }
 
 class Discipline {
