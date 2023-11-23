@@ -88,10 +88,14 @@ class _ActivityFormState extends State<ActivityForm> {
 
 class ActivityListTile extends StatefulWidget {
   final ValueSetter<Activity> onChanged;
+  final ValueGetter onDeleted;
   final Activity activity;
 
   const ActivityListTile(
-      {super.key, required this.activity, required this.onChanged});
+      {super.key,
+      required this.activity,
+      required this.onChanged,
+      required this.onDeleted});
 
   @override
   State<ActivityListTile> createState() => _ActivityListTileState();
@@ -141,7 +145,11 @@ class _ActivityListTileState extends State<ActivityListTile> {
                   );
                 },
                 icon: Icon(Icons.edit)),
-            IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
+            IconButton(
+                onPressed: () {
+                  widget.onDeleted();
+                },
+                icon: Icon(Icons.delete)),
           ],
         ));
   }
@@ -203,6 +211,11 @@ class _DisciplineFormState extends State<DisciplineForm> {
                                   activity.weight = changed.weight;
                                   activity.grade = changed.grade;
                                   activity.name = changed.name;
+                                });
+                              },
+                              onDeleted: () {
+                                setState(() {
+                                  activities.remove(activity);
                                 });
                               },
                             )
