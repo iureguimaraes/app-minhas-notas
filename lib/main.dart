@@ -13,6 +13,48 @@ void main() {
   runApp(ProviderScope(child: MinhasNotasApp()));
 }
 
+class AppNavigationBar extends StatefulWidget {
+  const AppNavigationBar({super.key});
+
+  @override
+  State<AppNavigationBar> createState() => _AppNavigationBarState();
+}
+
+class _AppNavigationBarState extends State<AppNavigationBar> {
+  int _currentPageIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentPageIndex,
+        onDestinationSelected: (index) => setState(() {
+          _currentPageIndex = index;
+        }),
+        destinations: [
+          NavigationDestination(
+            icon: Icon(Icons.book),
+            label: 'Minhas Disciplinas',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.add_box),
+            label: 'Recomendações',
+          ),
+        ],
+      ),
+      body: [
+        DisciplinesList(),
+        Scaffold(
+          appBar: AppBar(title: Text('Recomendações')),
+          body: Center(
+            child: Text('Em breve...'),
+          ),
+        )
+      ].elementAt(_currentPageIndex),
+    );
+  }
+}
+
 class MinhasNotasApp extends StatelessWidget {
   const MinhasNotasApp({Key? key}) : super(key: key);
 
@@ -44,7 +86,7 @@ class MinhasNotasApp extends StatelessWidget {
           appBarTheme: AppBarTheme(
               backgroundColor: Color(0xFF154479),
               foregroundColor: Colors.white)),
-      home: DisciplinesList(),
+      home: AppNavigationBar(),
     );
   }
 }
