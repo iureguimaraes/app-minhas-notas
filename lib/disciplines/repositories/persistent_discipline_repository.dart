@@ -37,19 +37,20 @@ class PersistentDisciplineRepository extends DisciplineRepository {
       discipline.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    discipline.id = id;
 
     for (int i = 0; i < discipline.activities.length; i++) {
       discipline.activities[i].disciplineId = id;
-      discipline.activities[i].disciplineId = id;
 
-      db.insert(
+      int activityId = await db.insert(
         'activities',
         discipline.activities[i].toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
+
+      discipline.activities[i].id = activityId;
     }
 
-    discipline.id = id;
     return discipline;
   }
 
@@ -98,7 +99,8 @@ class PersistentDisciplineRepository extends DisciplineRepository {
 
     for (int i = 0; i < results.length; i++) {
       Activity activity = Activity(
-          results[i]['name'], results[i]['weight'], results[i]['grade']);
+          results[i]['name'], results[i]['weight'], results[i]['grade'],
+          id: results[i]['id'], disciplineId: disciplineId);
       activity.disciplineId = disciplineId;
       activities.add(activity);
     }

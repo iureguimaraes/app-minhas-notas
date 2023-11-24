@@ -1,6 +1,7 @@
-import 'package:app_minhas_notas/disciplines/pages/add_discipline.dart';
-import 'package:app_minhas_notas/disciplines/pages/edit_discipline.dart';
 import 'package:app_minhas_notas/disciplines/controllers/discipline_controller.dart';
+import 'package:app_minhas_notas/disciplines/containers/share_discipline_form.dart';
+import 'package:app_minhas_notas/disciplines/pages/edit_discipline.dart';
+import 'package:app_minhas_notas/disciplines/pages/add_discipline.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
@@ -49,7 +50,28 @@ class DisciplinesList extends ConsumerWidget {
                                             .notifier)
                                         .removeDiscipline(discipline);
                                   },
-                                )
+                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      showModalBottomSheet(
+                                          context: context,
+                                          enableDrag: true,
+                                          builder: (BuildContext bc) =>
+                                              ShareDisciplineForm(
+                                                discipline: discipline,
+                                                onSubmit: (String description) {
+                                                  ref
+                                                      .read(
+                                                          disciplineControllerProvider
+                                                              .notifier)
+                                                      .share(discipline,
+                                                          description);
+
+                                                  Navigator.pop(context);
+                                                },
+                                              ));
+                                    },
+                                    icon: Icon(Icons.share))
                               ]),
                             )
                         ],

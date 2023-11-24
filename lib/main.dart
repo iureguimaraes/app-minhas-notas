@@ -1,4 +1,5 @@
 import 'package:app_minhas_notas/disciplines/pages/disciplines_list.dart';
+import 'package:app_minhas_notas/recomendations/pages/recomendations_list.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
@@ -34,23 +35,16 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
         destinations: [
           NavigationDestination(
             icon: Icon(Icons.book),
-            label: 'Minhas Disciplinas',
+            label: 'Minhas Notas',
           ),
           NavigationDestination(
             icon: Icon(Icons.add_box),
-            label: 'Recomendações',
+            label: 'Disciplinas Compartilhadas',
           ),
         ],
       ),
-      body: [
-        DisciplinesList(),
-        Scaffold(
-          appBar: AppBar(title: Text('Recomendações')),
-          body: Center(
-            child: Text('Em breve...'),
-          ),
-        )
-      ].elementAt(_currentPageIndex),
+      body: [DisciplinesList(), RecomendationsList()]
+          .elementAt(_currentPageIndex),
     );
   }
 }
