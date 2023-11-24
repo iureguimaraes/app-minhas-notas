@@ -3,11 +3,10 @@ import 'package:app_minhas_notas/disciplines/models/discipline.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 abstract class AbstractDisciplineService {
-  List<Discipline> disciplines = [];
-
-  List<Discipline> addDiscipline(Discipline discipline);
-  List<Discipline> updateDiscipline(Discipline discipline, int index);
-  List<Discipline> removeDiscipline(Discipline discipline);
+  Future<List<Discipline>> getAllDisciplines();
+  Future<Discipline> addDiscipline(Discipline discipline);
+  Future<Discipline> updateDiscipline(Discipline discipline, int index);
+  Future<bool> removeDiscipline(Discipline discipline);
 }
 
 class DisciplineService extends AbstractDisciplineService {
@@ -16,17 +15,22 @@ class DisciplineService extends AbstractDisciplineService {
   DisciplineService({required this.disciplineRepository});
 
   @override
-  List<Discipline> addDiscipline(Discipline discipline) {
+  Future<List<Discipline>> getAllDisciplines() {
+    return disciplineRepository.getDisciplines();
+  }
+
+  @override
+  Future<Discipline> addDiscipline(Discipline discipline) {
     return disciplineRepository.addDiscipline(discipline);
   }
 
   @override
-  List<Discipline> updateDiscipline(Discipline discipline, int index) {
+  Future<Discipline> updateDiscipline(Discipline discipline, int index) {
     return disciplineRepository.updateDiscipline(discipline, index);
   }
 
   @override
-  List<Discipline> removeDiscipline(Discipline discipline) {
+  Future<bool> removeDiscipline(Discipline discipline) {
     return disciplineRepository.removeDiscipline(discipline);
   }
 }

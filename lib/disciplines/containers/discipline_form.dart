@@ -257,7 +257,12 @@ class _DisciplineFormState extends State<DisciplineForm> {
                 minimumSize: Size(double.infinity, 50),
               ),
               onPressed: () {
-                widget.onSubmit(Discipline(_nameController.text, activities));
+                Discipline updatedDiscipline =
+                    Discipline(_nameController.text, activities);
+                
+                updatedDiscipline.id = widget.discipline?.id;
+
+                widget.onSubmit(updatedDiscipline);
               },
               child: Text(submitButtonLabel),
             )

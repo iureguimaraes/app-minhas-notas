@@ -1,11 +1,23 @@
 class Activity {
-  String name;
+  int? id;
+  int? disciplineId;
   double weight;
   double grade;
+  String name;
 
   Activity(this.name, this.weight, this.grade);
 
   String get description => 'Peso: $weight | Nota: $grade';
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'discipline_id': disciplineId,
+      'name': name,
+      'weight': weight,
+      'grade': grade,
+    };
+  }
 }
 
 class Discipline {
@@ -29,5 +41,12 @@ class Discipline {
 
       return "${activities.map((activity) => '${activity.name}: ${activity.grade}').join(", ")}${weights > 0 ? "\nMédia Atual: $currentGrade." : "\nNenhum peso cadastrado."}";
     }
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+    };
   }
 }
