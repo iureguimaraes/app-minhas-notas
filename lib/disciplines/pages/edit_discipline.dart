@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app_minhas_notas/disciplines/containers/discipline_form.dart';
-import 'package:app_minhas_notas/disciplines/repositories/discipline_repository.dart';
+import 'package:app_minhas_notas/disciplines/controllers/discipline_controller.dart';
 
 class EditDisciplinePage extends ConsumerStatefulWidget {
   final Discipline discipline;
@@ -20,7 +20,7 @@ class EditDisciplinePageState extends ConsumerState<EditDisciplinePage> {
   @override
   Widget build(BuildContext context) {
     final disciplineRepository =
-        ref.read(disciplineRepositoryProvider.notifier);
+        ref.read(disciplineControllerProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(title: Text('Editar Disciplina')),
