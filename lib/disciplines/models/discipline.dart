@@ -5,7 +5,7 @@ class Activity {
   double grade;
   String name;
 
-  Activity(this.name, this.weight, this.grade);
+  Activity(this.name, this.weight, this.grade, {this.id, this.disciplineId});
 
   String get description => 'Peso: $weight | Nota: $grade';
 
@@ -17,6 +17,26 @@ class Activity {
       'weight': weight,
       'grade': grade,
     };
+  }
+
+  static Activity fromJson(dynamic data) {
+    return Activity(
+      data['name'],
+      data['weight'],
+      data['grade'],
+      id: data['id'],
+      disciplineId: data['discipline_id'],
+    );
+  }
+
+  Activity clone() {
+    return Activity(
+      name,
+      weight,
+      grade,
+      id: id,
+      disciplineId: disciplineId,
+    );
   }
 }
 
@@ -48,5 +68,27 @@ class Discipline {
       'id': id,
       'name': name,
     };
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'activities': activities.map((e) => e.toMap()).toList(),
+    };
+  }
+
+  static Discipline fromJson(dynamic data) {
+    return Discipline(
+      data['name'],
+      List.from(data['activities']).map((e) => Activity.fromJson(e)).toList(),
+    );
+  }
+
+  Discipline clone() {
+    return Discipline(
+      name,
+      activities.map((activity) => activity.clone()).toList(),
+    );
   }
 }

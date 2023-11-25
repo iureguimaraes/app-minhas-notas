@@ -1,5 +1,6 @@
 import 'package:app_minhas_notas/disciplines/models/discipline.dart';
 import 'package:app_minhas_notas/disciplines/services/discipline_service.dart';
+import 'package:app_minhas_notas/recomendations/services/recomendation_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DisciplineController extends AsyncNotifier<List<Discipline>> {
@@ -32,8 +33,22 @@ class DisciplineController extends AsyncNotifier<List<Discipline>> {
     });
   }
 
+  void share(Discipline discipline, String description) async {
+    discipline.id = null;
+    for (int i = 0; i < discipline.activities.length; i++) {
+      discipline.activities[i].disciplineId = null;
+      discipline.activities[i].grade = 0;
+      discipline.activities[i].id = null;
+    }
+
+    await recomendationService.saveRecomendation(discipline, description);
+  }
+
   DisciplineService get disciplineService =>
       ref.read(disciplineServiceProvider);
+
+  RecomendationService get recomendationService =>
+      ref.read(recomendationServiceProvider);
 }
 
 final disciplineControllerProvider =
