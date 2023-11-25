@@ -13,7 +13,7 @@ class DisciplinesList extends ConsumerWidget {
     final disciplines = ref.watch(disciplineControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text('Minhas Disciplinas')),
+      appBar: AppBar(title: Text('Minhas Notas')),
       body: disciplines.when(
           data: (disciplines) => Center(
                 child: disciplines.isEmpty
