@@ -1,16 +1,49 @@
-# app_minhas_notas
+# App Minhas Notas
 
-A new Flutter project.
+Este projeto é uma aplicação Flutter destinada a auxiliar na organização e gestão de notas.
 
-## Getting Started
+## Instruções de execução
 
-This project is a starting point for a Flutter application.
+Certifique-se de ter o ambiente Flutter configurado corretamente em sua máquina. Para mais informações, consulte a documentação de instalação do Flutter.
 
-A few resources to get you started if this is your first Flutter project:
+Após configurar o ambiente, siga estas etapas:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+**1. Clone este repositório:**
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+git clone https://github.com/seu-usuario/app_minhas_notas.git
+```
+
+**2. Navegue até o diretório do projeto:**
+
+```bash
+cd app_minhas_notas
+```
+
+**Execute o comando para obter as dependências do Flutter:**
+
+```bash
+flutter pub get
+```
+
+**Agora, você pode executar o aplicativo:**
+
+```bash
+flutter run
+```
+
+## Análise de código
+
+Para melhorar a qualidade do código e identificar possíveis problemas, execute o seguinte comando para análise estática:
+
+```bash
+flutter analyze
+```
+
+Esete comando verificará o código em busca de possíveis bugs e oferecerá sugestões para melhorias.
+
+**Observação:** Certifique-se de corrigir quaisquer problemas ou avisos indicados pela análise estática antes de enviar alterações para o repositório.
+
+Esperamos que esta aplicação seja útil para você!
+
+Se tiver alguma dúvida, consulte a documentação, fale com algum dos contribuidores do projeto ou procure suporte na comunidade Flutter.
